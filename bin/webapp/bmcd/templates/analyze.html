@@ -1,0 +1,715 @@
+<!--suppress ALL -->
+<div class = "row px-1 mt-2" style = "max-width: 1600px" >
+    <!--suppress SpellCheckingInspection -->
+    <div id = "Titulo" class = "col-12" >
+        <div class = "row" >
+            <div class = "col-sm-6 col-mg-6 col-xl-6" align = "left" >
+                <h1 >Simular BMCD</h1 >
+            </div >
+            <div class = "col-sm-6 col-mg-6 col-xl-6" align = "right" >
+                <button type = "button" class = "btn btn-outline-dark" ng-click = saveAnalyse()>Gravar</button >
+                <button type = "button" class = "btn btn-outline-dark" ng-click = "redirectTo()" >Voltar</button >
+                <button id = "downloadButton" type = "button" class = "btn btn-outline-dark" ng-click = "downloadData()" disabled  data-step = "7" data-intro = "Esse botão permite o download de um arquivo .csv com os valores das cartas dinâmométricas. Esse botão ficará disponível apenas após a análise.">
+                    Download .csv
+                </button >
+                <button data-step = "1" data-intro = "Olá! Bem-vindo ao guia de ajuda do usuário no simulador de BMCD." type = "button" class = "btn btn-outline-dark" ng-click = "introtuc();" >
+                    ?
+                </button >
+            </div >
+        </div >
+        <hr class = "my-2" style = "background-color: black" >
+    </div >
+    <div class = "col-md-2" data-step = "2" data-intro = "Após a análise dos dados de entrada, essa aba dará acesso aos gráficos e parâmetros operacionais referentes à simulação." >
+        <ul class = "list-group border-0" >
+            <li id = "tab_1" class = "list-group-item border-0 abasBMCD" ng-class = "{ active: getTab(1) }" >
+                <a href ng-click = "setTab(1)" >Entradas</a >
+            </li >
+            <li id = "tab_2" class = "list-group-item border-0 abasBMCD" ng-class = "{ active:getTab(2) }" >
+                <a href ng-click = "setTab(2)" data-step = "5" data-intro = "Aqui é possível alternar entre os gráficos da carta de cada coluna.">
+                    Cartas Dinamométricas</a >
+            </li >
+            <li id = "tab_3" class = "list-group-item border-0 abasBMCD" ng-class = "{ active:getTab(3) }" >
+                <a href ng-click = "setTab(3)" data-step = "6" data-intro = "Aqui é possível conferir os parâmetros operacionais da simulação, como: cargas, tensões, vazões e torque.">
+                    Parâmetros Operacionais</a >
+            </li >
+        </ul >
+    </div >
+    <div id = "DadosDeEntrada" class = "col-md-12 col-lg-8 col-xl-8" ng-show = "getTab(1)" >
+        <form id = "form1" >
+            <ul class = "list-inline" data-step = "3" data-intro = "Esta área de navegação dá acesso aos dados de entrada, após preencher uma página, utilize essa área para avançar à próxima aba." >
+                <li class = "list-inline-item abasBMCD" ng-class = "{ active: getEntr(1) }" >
+                    <a href ng-click = "setEntr(1)" >Identificadores</a >
+                </li >
+                <li class = "list-inline-item abasBMCD" ng-class = "{ active: getEntr(2) }" >
+                    <a href ng-click = "setEntr(2)" >Dados Gerais</a >
+                </li >
+                <li class = "list-inline-item abasBMCD" ng-class = "{ active: getEntr(3) }"  data-step = "4" data-intro = "Após preencher todas as abas, clique no botão 'analisar', no final dessa aba">
+                    <a href ng-click = "setEntr(3)" >Dados do Poço</a >
+                </li >
+            </ul >
+            <div ng-show = "getEntr(1)" >
+                <table class = "table  table-striped table-bordered" >
+                    <thead style = "background-color: #d9d9d9;" >
+                    <tr align = "center" >
+                        <th colspan = "2" scope = "col" >Identificadores</th >
+                        <th colspan = "2" scope = "col" >Dados</th >
+                    </tr >
+                    </thead >
+                    <tbody >
+                    <tr align = "center" >
+                        <th >Usuário</th >
+                        <td ><input required class = "form-control" type = "text" ng-model = object.name ></td >
+                        <th >Data</th >
+                        <td >
+                            <input required class = "form-control" type = "date" ng-model = object.date >
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <th >Código do Poço</th >
+                        <td ><input required class = "form-control" type = "text" ng-model = object.well ></td >
+                        <td ><b >Unidade de Bombeio</b ></td >
+                        <td >
+                            <select class = "custom-select" name = "revestimento" ng-model = object.bmcd.bombUnit ng-options = "bomb as bomb.description for bomb in unidadesBombeio track by bomb.id" >
+                                <!--<option ng-repeat = "revestimeto in revestimentos" value = revestimeto.id>{{revestimeto-->
+                                <!--.denominacao}}-->
+                                <!--</option>-->
+                            </select >
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Curso</b > (in)</td >
+                        <td >
+                            <select class = "custom-select" name = "correlação" ng-model = object.bmcd.curso convert-to-number >
+                                <option ng-if = "object.bmcd.bombUnit.path1!=0" value = {{object.bmcd.bombUnit.path1}} >
+                                    {{object.bmcd.bombUnit.path1}}
+                                </option >
+                                <option ng-if = "object.bmcd.bombUnit.path2!=0" value = {{object.bmcd.bombUnit.path2}} >
+                                    {{object.bmcd.bombUnit.path2}}
+                                </option >
+                                <option ng-if = "object.bmcd.bombUnit.path3!=0" value = {{object.bmcd.bombUnit.path3}} >
+                                    {{object.bmcd.bombUnit.path3}}
+                                </option >
+                                <option ng-if = "object.bmcd.bombUnit.path4!=0" value = {{object.bmcd.bombUnit.path4}} >
+                                    {{object.bmcd.bombUnit.path4}}
+                                </option >
+                                <option ng-if = "object.bmcd.bombUnit.path5!=0" value = {{object.bmcd.bombUnit.path5}} >
+                                    {{object.bmcd.bombUnit.path5}}
+                                </option >
+                            </select >
+                        </td >
+                        <td ><b >Ciclos por Minuto</b > (CPM)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.ciclos placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <!--<th>Sistema de Unidades</th>-->
+                        <!--<td>-->
+                        <!--<input required class = "form-control" type = "text" ng-model = object.bmcd.>-->
+                        <!--</td>-->
+                        <td ><b >Revestimento</b ></td >
+                        <td >
+                            <select class = "custom-select" name = "revestimento" ng-model = object.bmcd.casing ng-init = "object.bmcd.casing.id = 1" ng-options = "revestimeto as revestimeto.denominacao for revestimeto in revestimentos track by revestimeto.id" >
+                                <!--<option ng-repeat = "revestimeto in revestimentos" value = revestimeto.id>{{revestimeto-->
+                                <!--.denominacao}}-->
+                                <!--</option>-->
+                            </select >
+                    </tr >
+                    </tbody >
+                </table >
+                <div class = "btns" >
+                    <button class = "btn btn-outline-dark" type = "reset" >Limpar</button >
+                </div >
+            </div >
+        </form >
+        <div ng-show = "getEntr(2)" >
+            <form id = "form2" >
+                <table class = "table  table-striped table-bordered" >
+                    <thead style = "background-color: #d9d9d9;" >
+                    <tr align = "center" >
+                        <th colspan = "4" scope = "col" >Dados Gerais</th >
+                    </tr >
+                    </thead >
+                    <tbody >
+                    <tr align = "center" >
+                        <td ><b >Espaço morto</b > (m)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.espacoMorto placeholder = "" />
+                        </td >
+                        <td ><b >Módulo de Elasticidade da Coluna de Hastes</b > (psi)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.moduloElasticidadeColunaHastes placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Módulo de Elasticidade da Coluna de Tubos</b > (psi)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.moduloElasticidadeColunaTubos placeholder = "" />
+                        </td >
+                        <td ><b >Diâmetro da Haste Polida</b > (in)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.diametroHastePolida placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Temperatura na Superfície</b > (ºC)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.temperaturaSuperficie placeholder = "" />
+                        </td >
+                        <td ><b >Massa Específica do Material das Hastes</b > (kg/m³)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.massaEspecificaMaterialHastes placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td colspan = "2" ><b >Número mínimo de pontos na carta</b ></td >
+                        <td colspan = "2" >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.numeroMinimoPontosCarta placeholder = "" />
+                        </td >
+                    </tr >
+                    </tbody >
+                </table >
+                <div class = "btns" >
+                    <button class = "btn btn-outline-dark" type = "reset" >Limpar</button >
+                </div >
+            </form >
+        </div >
+        <form id = "form3" ng-submit = "doNewAnalyse(); setTab(2)" >
+            <div ng-show = "getEntr(3)" >
+                <table class = "table  table-striped table-bordered" >
+                    <thead style = "background-color: #d9d9d9;" >
+                    <tr align = "center" >
+                        <th colspan = "4" scope = "col" >Dados do Poço</th >
+                    </tr >
+                    </thead >
+                    <tbody >
+                    <tr align = "center" >
+                        <td colspan = "2" class = "abasBMCD" ng-class = "{ active: isSet(1) }" >
+                            <a href ng-click = "select(1)" > Inferior</a >
+                        </td >
+                        <td colspan = "2" class = "abasBMCD" ng-class = "{ active: isSet(2) }" >
+                            <a href ng-click = "select(2)" > Superior</a >
+                        </td >
+                    </tr >
+                    </tbody >
+                    <tbody id = "dadosInferior" ng-show = "isSet(1)" ng-class = "{ active: isSet(1) }" ng-init = "calcComprimentoSecao(object.bmcd.bmcdInferior)" >
+                    <tr align = "center" >
+                        <td ><b >Profundidade da bomba </b >(m)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt notEdicaoLivreInf" type = "number" step = "any" ng-model = object.bmcd.bmcdInferior.profBomba placeholder = "" ng-change = "calcComprimentoSecao(object.bmcd.bmcdInferior)" />
+                        </td >
+                        <td ><b >Diâmetro do Pistão </b >(in)</td >
+                        <td >
+                            <select ng-change = "calcComprimentoSecao(object.bmcd.bmcdInferior)" ng-cloak class = "custom-select" name = "Hastes" ng-model = object.bmcd.bmcdInferior.piston ng-init = "rodCodeSelector = listOfRodCode[0]" ng-options = "haste as haste.diameterPiston for haste in hastes | piston:rodCodeSelector  track by haste.id" >
+                                <!--<option ng-repeat = "revestimeto in revestimentos" value = revestimeto.id>{{revestimeto-->
+                                <!--.denominacao}}-->
+                                <!--</option>-->
+                            </select >
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Coluna de Produção</b ></td >
+                        <td >
+                            <select class = "custom-select" name = "coluna" ng-model = object.bmcd.bmcdInferior.tubing ng-options = "coluna as coluna.denominacao for coluna in colunas track by coluna.id" >
+                                <!--<option ng-repeat = "revestimeto in revestimentos" value = revestimeto.id>{{revestimeto-->
+                                <!--.denominacao}}-->
+                                <!--</option>-->
+                            </select ></td >
+                        <td ><b >Âncora</b ></td >
+                        <td >
+                            <select class = "custom-select" name = "correlação" ng-model = object.bmcd.bmcdInferior.ancora convert-to-number >
+                                <option value = "1" >Sim</option >
+                                <option value = "0" >Não</option >
+                            </select >
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Código da coluna de Hastes</b ></td >
+                        <td >
+                            <select ng-cloak class = "custom-select notEdicaoLivreInf" name = "CodHaste" ng-model = rodCodeSelector ng-init = "rodCodeSelector = listOfRodCode[0]" ng-options = "rodCode as rodCode for rodCode in listOfRodCode  track by rodCode" > </select >
+                        </td >
+                        <td ><b >Grau</b ></td >
+                        <td >
+                            <select class = "custom-select" name = "correlação" ng-model = object.bmcd.bmcdInferior.grau >
+                                <option value = "C" >C</option >
+                                <option value = "D" >D</option >
+                                <option value = "E" >E</option >
+                                <option value = "K" >K</option >
+                                <option value = "N-97" >N-97</option >
+                            </select >
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Pressão Cabeça</b > (kgf/cm²)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdInferior.pressaoCabeca placeholder = "" />
+                        </td >
+                        <td ><b >Pressão Anular</b > (kgf/cm²)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdInferior.pressaoAnular placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >BSW</b > (%)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdInferior.bsw placeholder = "" />
+                        </td >
+                        <td ><b >Grau API</b ></td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdInferior.api placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Razão Gás-Óleo</b > (m³/m³)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdInferior.rgo placeholder = "" />
+                        </td >
+                        <td ><b >Densidade do Gás</b > (ar = 1)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdInferior.densidadeRelativaGas placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Eficiência de Separação do Gás</b > (%)</td >
+                        <td >
+                            <input required disabled class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdInferior.eficienciaSeparacaoGas placeholder = "" />
+                        </td >
+                        <td ><b >Submergência</b > (m)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdInferior.submergencia placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Viscosidade Média</b > (cp)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdInferior.viscosidadeMedia placeholder = "" />
+                        </td >
+                        <td ><b >Temperatura na Bomba</b > (°C)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdInferior.temperaturaBomba placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <th colspan = "4" scope = "col" ><b >Comprimento das hastes </b >(m)</th >
+                    </tr >
+                    <th colspan = "4" scope = "col" align = "center" >
+                        <table align = "center" >
+                            <td >
+                                <select class = "custom-select" name = "correlação" ng-model = object.bmcd.bmcdInferior.edicaoLivre convert-to-number ng-change = "edicaoLivreChange()" >
+                                    <option value = "0" selected >% api</option >
+                                    <option value = "1" >Edição livre</option >
+                                </select >
+                            </td >
+                            <td data-toggle = "tooltip" title = "Diâmetro da haste (in)" >
+                                <select class = "custom-select edicaoLivreInf" disabled ng-model = object.bmcd.bmcdInferior.diametroHaste[0] convert-to-number >
+                                    <option value = "1" > 1"</option >
+                                    <option value = "0.875" >7/8"</option >
+                                    <option value = "0.75" > 3/4"</option >
+                                    <option value = "0.625" >5/8"</option >
+                                </select ></td >
+                            <td data-toggle = "tooltip" title = "Comprimento da haste (m)" >
+                                <textarea class = "form-control numerosabnt edicaoLivreInf" type = "number" style = "resize: none" rows = "1" cols = "4" disabled ng-model = "object.bmcd.bmcdInferior.compSecao[0]" ng-change = "calcProf('inf')" > </textarea >
+                            </td >
+                            <td data-toggle = "tooltip" title = "Diâmetro da haste (in)" >
+                                <select class = "custom-select edicaoLivreInf" disabled ng-model = object.bmcd.bmcdInferior.diametroHaste[1] convert-to-number >
+                                    <option value = "1" > 1"</option >
+                                    <option value = "0.875" >7/8"</option >
+                                    <option value = "0.75" > 3/4"</option >
+                                    <option value = "0.625" >5/8"</option >
+                                </select ></td >
+                            <td data-toggle = "tooltip" title = "Comprimento da haste (m)" >
+                                <textarea class = "form-control numerosabnt edicaoLivreInf" type = "number" style = "resize: none" rows = "1" cols = "4" disabled ng-model = "object.bmcd.bmcdInferior.compSecao[1]" ng-change = "calcProf('inf')" > </textarea >
+                            </td >
+                            <td data-toggle = "tooltip" title = "Diâmetro da haste (in)" >
+                                <select class = "custom-select edicaoLivreInf" disabled ng-model = object.bmcd.bmcdInferior.diametroHaste[2] convert-to-number >
+                                    <option value = "1" > 1"</option >
+                                    <option value = "0.875" >7/8"</option >
+                                    <option value = "0.75" > 3/4"</option >
+                                    <option value = "0.625" >5/8"</option >
+                                </select ></td >
+                            <td data-toggle = "tooltip" title = "Comprimento da haste (m)" >
+                                <textarea class = "form-control numerosabnt edicaoLivreInf" type = "number" style = "resize: none" rows = "1" cols = "4" disabled ng-model = "object.bmcd.bmcdInferior.compSecao[2]" ng-change = "calcProf('inf')" > </textarea >
+                            </td >
+                            <td data-toggle = "tooltip" title = "Diâmetro da haste (in)" >
+                                <select class = "custom-select edicaoLivreInf" disabled ng-model = object.bmcd.bmcdInferior.diametroHaste[3] convert-to-number >
+                                    <option value = "1" > 1"</option >
+                                    <option value = "0.875" >7/8"</option >
+                                    <option value = "0.75" > 3/4"</option >
+                                    <option value = "0.625" >5/8"</option >
+                                </select ></td >
+                            <td data-toggle = "tooltip" title = "Comprimento da haste (m)" >
+                                <textarea class = "form-control numerosabnt edicaoLivreInf" type = "number" style = "resize: none" rows = "1" cols = "4" disabled ng-model = "object.bmcd.bmcdInferior.compSecao[3]" ng-change = "calcProf('inf')" > </textarea >
+                            </td >
+                        </table >
+                    </tbody >
+                    <tbody id = "dadosbmcdSuperior" ng-show = "isSet(2)" ng-class = "{ active: isSet(2) }" >
+                    <tr align = "center" >
+                        <td ><b >Profundidade da bomba </b >(m)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt notEdicaoLivreSup" type = "number" step = "any" ng-model = object.bmcd.bmcdSuperior.profBomba placeholder = "" ng-change = "calcComprimentoSecao(object.bmcd.bmcdSuperior)" />
+                        </td >
+                        <td ><b >Diâmetro do Pistão </b >(in)</td >
+                        <td >
+                            <select ng-change = "calcComprimentoSecao(object.bmcd.bmcdSuperior)" ng-cloak class = "custom-select" name = "Hastes" ng-model = object.bmcd.bmcdSuperior.piston ng-init = "rodCodeSelector2 = listOfRodCode[0]" ng-options = "haste as haste.diameterPiston for haste in hastes | piston:rodCodeSelector2  track by haste.id" >
+                                <!--<option ng-repeat = "revestimeto in revestimentos" value = revestimeto.id>{{revestimeto-->
+                                <!--.denominacao}}-->
+                                <!--</option>-->
+                            </select >
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Coluna de Produção</b ></td >
+                        <td >
+                            <select class = "custom-select" name = "coluna" ng-model = object.bmcd.bmcdSuperior.tubing ng-options = "coluna as coluna.denominacao for coluna in colunas track by coluna.id" >
+                                <!--<option ng-repeat = "revestimeto in revestimentos" value = revestimeto.id>{{revestimeto-->
+                                <!--.denominacao}}-->
+                                <!--</option>-->
+                            </select ></td >
+                        <td ><b >Âncora</b ></td >
+                        <td >
+                            <select class = "custom-select" name = "correlação" ng-model = object.bmcd.bmcdSuperior.ancora convert-to-number >
+                                <option value = "1" >Sim</option >
+                                <option value = "0" >Não</option >
+                            </select >
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Código da coluna de Hastes</b ></td >
+                        <td >
+                            <select ng-cloak class = "custom-select notEdicaoLivreSup" name = "CodHaste" ng-model = rodCodeSelector2 ng-init = "rodCodeSelector2 = listOfRodCode[0]" ng-options = "rodCode as rodCode for rodCode in listOfRodCode  track by rodCode" >
+                                <!--<option ng-repeat = "revestimeto in revestimentos" value = revestimeto.id>{{revestimeto-->
+                                <!--.denominacao}}-->
+                                <!--</option>-->
+                            </select >
+                        </td >
+                        <td ><b >Grau</b ></td >
+                        <td >
+                            <select class = "custom-select" name = "correlação" ng-model = object.bmcd.bmcdSuperior.grau >
+                                <option value = "C" >C</option >
+                                <option value = "D" >D</option >
+                                <option value = "E" >E</option >
+                                <option value = "K" >K</option >
+                                <option value = "N-97" >N-97</option >
+                            </select >
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Pressão Cabeça</b > (kgf/cm²)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdSuperior.pressaoCabeca placeholder = "" />
+                        </td >
+                        <td ><b >Pressão Anular</b > (kgf/cm²)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdSuperior.pressaoAnular placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >BSW</b > (%)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdSuperior.bsw placeholder = "" />
+                        </td >
+                        <td ><b >Grau API</b ></td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdSuperior.api placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Razão Gás-Óleo</b > (m³/m³)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdSuperior.rgo placeholder = "" />
+                        </td >
+                        <td ><b >Densidade do Gás</b > (ar = 1)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdSuperior.densidadeRelativaGas placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Eficiência de Separação do Gás</b > (%)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdSuperior.eficienciaSeparacaoGas placeholder = "" />
+                        </td >
+                        <td ><b >Submergência</b > (m)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdSuperior.submergencia placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <td ><b >Viscosidade Média</b > (cp)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdSuperior.viscosidadeMedia placeholder = "" />
+                        </td >
+                        <td ><b >Temperatura na Bomba</b > (°C)</td >
+                        <td >
+                            <input required class = "form-control numerosabnt" type = "number" step = "any" ng-model = object.bmcd.bmcdSuperior.temperaturaBomba placeholder = "" />
+                        </td >
+                    </tr >
+                    <tr align = "center" >
+                        <th colspan = "4" scope = "col" ><b >Comprimento das hastes </b >(m)</th >
+                    </tr >
+                    <th colspan = "4" scope = "col" align = "center" >
+                        <table align = "center" >
+                            <td >
+                                <select class = "custom-select" name = "correlação" ng-model = object.bmcd.bmcdSuperior.edicaoLivre convert-to-number ng-change = "edicaoLivreChange()" >
+                                    <option value = "0" selected >% api</option >
+                                    <option value = "1" >Edição livre</option >
+                                </select >
+                            </td >
+                            <td data-toggle = "tooltip" title = "Diâmetro da haste (in)" >
+                                <select class = "custom-select edicaoLivreSup" disabled ng-model = object.bmcd.bmcdSuperior.diametroHaste[0] convert-to-number >
+                                    <option value = "1" > 1"</option >
+                                    <option value = "0.875" >7/8"</option >
+                                    <option value = "0.75" > 3/4"</option >
+                                    <option value = "0.625" >5/8"</option >
+                                </select ></td >
+                            <td data-toggle = "tooltip" title = "Comprimento da haste (m)" >
+                                <textarea class = "form-control numerosabnt edicaoLivreSup" type = "number" style = "resize: none" rows = "1" cols = "4" disabled ng-model = "object.bmcd.bmcdSuperior.compSecao[0]" ng-change = "calcProf('sup')" > </textarea >
+                            </td >
+                            <td data-toggle = "tooltip" title = "Diâmetro da haste (in)" >
+                                <select class = "custom-select edicaoLivreSup" disabled ng-model = object.bmcd.bmcdSuperior.diametroHaste[1] convert-to-number >
+                                    <option value = "1" > 1"</option >
+                                    <option value = "0.875" >7/8"</option >
+                                    <option value = "0.75" > 3/4"</option >
+                                    <option value = "0.625" >5/8"</option >
+                                </select ></td >
+                            <td data-toggle = "tooltip" title = "Comprimento da haste (m)" >
+                                <textarea class = "form-control numerosabnt edicaoLivreSup" type = "number" style = "resize: none" rows = "1" cols = "4" disabled ng-model = "object.bmcd.bmcdSuperior.compSecao[1]" ng-change = "calcProf('sup')" > </textarea >
+                            </td >
+                            <td data-toggle = "tooltip" title = "Diâmetro da haste (in)" >
+                                <select class = "custom-select edicaoLivreSup" disabled ng-model = object.bmcd.bmcdSuperior.diametroHaste[2] convert-to-number >
+                                    <option value = "1" > 1"</option >
+                                    <option value = "0.875" >7/8"</option >
+                                    <option value = "0.75" > 3/4"</option >
+                                    <option value = "0.625" >5/8"</option >
+                                </select ></td >
+                            <td data-toggle = "tooltip" title = "Comprimento da haste (m)" >
+                                <textarea class = "form-control numerosabnt edicaoLivreSup" type = "number" style = "resize: none" rows = "1" cols = "4" disabled ng-model = "object.bmcd.bmcdSuperior.compSecao[2]" ng-change = "calcProf('sup')" > </textarea >
+                            </td >
+                            <td data-toggle = "tooltip" title = "Diâmetro da haste (in)" >
+                                <select class = "custom-select edicaoLivreSup" disabled ng-model = object.bmcd.bmcdSuperior.diametroHaste[3] convert-to-number >
+                                    <option value = "1" > 1"</option >
+                                    <option value = "0.875" >7/8"</option >
+                                    <option value = "0.75" > 3/4"</option >
+                                    <option value = "0.625" >5/8"</option >
+                                </select ></td >
+                            <td data-toggle = "tooltip" title = "Comprimento da haste (m)" >
+                                <textarea class = "form-control numerosabnt edicaoLivreSup" type = "number" style = "resize: none" rows = "1" cols = "4" disabled ng-model = "object.bmcd.bmcdSuperior.compSecao[3]" ng-change = "calcProf('sup')" > </textarea >
+                            </td >
+                        </table >
+                    </th >
+                    </tbody >
+                </table >
+                <div class = "btns" >
+                    <button class = "btn btn-outline-dark" type = "submit" onsubmit = "submitForms()" >Analisar
+                    </button >
+                    <button class = "btn btn-outline-dark" type = "reset" >Limpar</button >
+                </div >
+            </div >
+        </form >
+    </div >
+    <div id = "Graficos" class = "col-md-12 col-lg-8 col-xl-8" ng-show = "getTab(2)" >
+        <ul class = "list-inline" >
+            <li class = "list-inline-item abasBMCD" ng-class = "{ active: getGraph(1) }" >
+                <a href ng-click = "setGraph(1)" >Inferior</a >
+            </li >
+            <li class = "list-inline-item abasBMCD" ng-class = "{ active: getGraph(2) }" >
+                <a href ng-click = "setGraph(2)" >Superior</a >
+            </li >
+            <li class = "list-inline-item abasBMCD" ng-class = "{ active: getGraph(3) }" >
+                <a href ng-click = "setGraph(3)" >Resultante</a >
+            </li >
+        </ul >
+        <div style = "max-width: 1030px" ng-show = "getGraph(1)" >
+            <h3 >Carta de Superfície</h3 >
+            <hr class = "my-2" style = "background-color: black" >
+            <div ng-controller = "genericChart" ng-init = "graficosfunction.push(atualizarGrafico);atualizarGrafico(zeroChart)" >
+                <canvas class = "chart chart-line" chart-data = "data" chart-options = "options" chart-labels = "labels" chart-colors = "colors" chart-dataset-override = "datasetOverride" chart-series = "series" ></canvas >
+            </div >
+            <h3 >Carta de Fundo</h3 >
+            <hr class = "my-2" style = "background-color: black" >
+            <div ng-controller = "genericChart" ng-init = "graficosfunction.push(atualizarGrafico);atualizarGrafico(zeroChart)" >
+                <canvas class = "chart chart-line" chart-data = "data" chart-options = "options" chart-labels = "labels" chart-colors = "colors" chart-dataset-override = "datasetOverride" chart-series = "series" ></canvas >
+            </div >
+        </div >
+        <div style = "max-width: 1030px" ng-show = "getGraph(2)" >
+            <h3 >Carta de Superfície</h3 >
+            <hr class = "my-2" style = "background-color: black" >
+            <div ng-controller = "genericChart" ng-init = "graficosfunction.push(atualizarGrafico);atualizarGrafico(zeroChart)" >
+                <canvas class = "chart chart-line" chart-data = "data" chart-options = "options" chart-labels = "labels" chart-colors = "colors" chart-dataset-override = "datasetOverride" chart-series = "series" ></canvas >
+            </div >
+            <h3 >Carta de Fundo</h3 >
+            <hr class = "my-2" style = "background-color: black" >
+            <div ng-controller = "genericChart" ng-init = "graficosfunction.push(atualizarGrafico);atualizarGrafico(zeroChart)" >
+                <canvas class = "chart chart-line" chart-data = "data" chart-options = "options" chart-labels = "labels" chart-colors = "colors" chart-dataset-override = "datasetOverride" chart-series = "series" ></canvas >
+            </div >
+        </div >
+        <div style = "max-width: 1030px" ng-show = "getGraph(3)" >
+            <h3 >Carta Resultante</h3 >
+            <hr class = "my-2" style = "background-color: black" >
+            <div ng-controller = "genericChart" ng-init = "graficosfunction.push(atualizarGrafico);atualizarGrafico(zeroChart)" >
+                <canvas class = "chart chart-line" chart-data = "data" chart-options = "options" chart-labels = "labels" chart-colors = "colors" chart-dataset-override = "datasetOverride" chart-series = "series" ></canvas >
+            </div >
+        </div >
+        <div style = "height: 300px" ></div >
+    </div >
+    <div id = "ParametrosOperacionais" class = "col-md-12 col-lg-8 col-xl-8" ng-show = "getTab(3)" >
+
+
+         <ul class = "list-inline" >
+            <li class = "list-inline-item abasBMCD" ng-class = "{ active: getParam(1) }" >
+                <a href ng-click = "setParam(1)" >UB</a >
+            </li >
+            <li class = "list-inline-item abasBMCD" ng-class = "{ active: getParam(2) }" >
+                <a href ng-click = "setParam(2)" >Coluna Inferior</a >
+            </li >
+            <li class = "list-inline-item abasBMCD" ng-class = "{ active: getParam(3) }" >
+                <a href ng-click = "setParam(3)" >Coluna Superior</a >
+            </li >
+            <li class = "list-inline-item abasBMCD" ng-class = "{ active: getParam(4) }" >
+                <a href ng-click = "setParam(4)" >Tensões</a >
+            </li >
+            <li class = "list-inline-item abasBMCD" ng-class = "{ active: getParam(5) }" >
+                <a href ng-click = "setParam(5)" >Torque</a >
+            </li >
+        </ul >
+        <table class = "table  table-striped table-bordered" ng-show = "getParam(1)" >
+            <thead style = "background-color: #d9d9d9;" >
+            <tr align = "center" >
+                <th colspan = "4" scope = "col" > UB
+                </th >
+            </tr >
+            </thead >
+            <tbody >
+            <tr align = "center" >
+                <td ><b >Torque Máximo </b >(lbf*in)</td >
+                <td id = "Torque_max" >{{ response.torqueMaximo| numberbrl:2}}</td >
+                <td ><b >Carga Máxima</b > (lbf)</td >
+                <td id = "Carga_max" >{{ response.cargaMaxima | numberbrl:2}}
+                </td >
+            </tr >
+            <tr align = "center" >
+                <td ><b >Pot. Cabresto </b > (hp)</td >
+                <td >{{ response.potCabresto | numberbrl:2}}</td >
+                <td id = "Carga_min" ><b >Carga Mínima</b > (lbf)</td >
+                <td >{{ response.cargaMinima| numberbrl:2}}</td >
+            </tr >
+            <tr align = "center" >
+                <td ><b >Potência motor</b > (cv)</td >
+                <td >{{ response.potenciaMotor| numberbrl:2}}</td >
+            </tr >
+            </tbody >
+        </table >
+        <table class = "table  table-striped table-bordered" ng-show = "getParam(2)" >
+            <thead style = "background-color: #d9d9d9;" >
+            <tr align = "center" >
+                <th colspan = "4" scope = "col" >Coluna Inferior
+                </th >
+            </tr >
+            </thead >
+            <tbody >
+            <tr align = "center" >
+                <td ><b >Vazão Bruta</b > (m³/dia)</td >
+                <td >{{ response.inferiorVazaoBruta | numberbrl:2}}
+                </td >
+                <td ><b >Vazão de Óleo</b > (m³/dia)</td >
+                <td >{{ response.inferiorVazaoOleo | numberbrl:2}}
+                </td >
+            </tr >
+            <tr align = "center" >
+                <td ><b >Tensão Máxima</b > (psi)</td >
+                <td >
+                    {{ response.inferiorTensaoMaxima| numberbrl:2}}
+                </td >
+                <td ><b >Tensão Mínima</b > (psi)</td >
+                <td >{{ response.inferiorTensaoMinima | numberbrl:2}}
+                </td >
+            </tr >
+            <tr align = "center" >
+                <td ><b >Tensão Admissível</b > (psi)</td >
+                <td >
+                    {{ response.inferiorTensaoAdmissivel| numberbrl:2}}
+                </td >
+                <td ><b >% de Utilização</b ></td >
+                <td >{{ response.inferiorPorcentagemUtilizacao | numberbrl:2}}
+                </td >
+            </tr >
+            <tr align = "center" >
+                <td ><b >Espaço Morto Dinâmico</b > (m)</td >
+                <td >
+                    {{ response.inferiorEspacoMortoDinamico| numberbrl:2}}
+                </td >
+                <td ><b >Desl. Vol.</b > (m³/d)</td >
+                <td >{{ response.inferiorDeslVol | numberbrl:2}}
+                </td >
+            </tr >
+            </tbody >
+        </table >
+        <table class = "table  table-striped table-bordered" ng-show = "getParam(3)" >
+            <thead style = "background-color: #d9d9d9;" >
+            <tr align = "center" >
+                <th colspan = "4" scope = "col" >Coluna Superior
+                </th >
+            </tr >
+            </thead >
+            <tbody >
+            <tr align = "center" >
+                <td ><b >Vazão Bruta</b > (m³/dia)</td >
+                <td >{{ response.superiorVazaoBruta | numberbrl:2}}
+                </td >
+                <td ><b >Vazão de Óleo</b > (m³/dia)</td >
+                <td >{{ response.superiorVazaoOleo | numberbrl:2}}
+                </td >
+            </tr >
+            <tr align = "center" >
+                <td ><b >Tensão Máxima</b > (psi)</td >
+                <td >
+                    {{ response.superiorTensaoMaxima| numberbrl:2}}
+                </td >
+                <td ><b >Tensão Mínima</b > (psi)</td >
+                <td >{{ response.superiorTensaoMinima | numberbrl:2}}
+                </td >
+            </tr >
+            <tr align = "center" >
+                <td ><b >Tensão Admissível</b > (psi)</td >
+                <td >
+                    {{ response.superiorTensaoAdmissivel| numberbrl:2}}
+                </td >
+                <td ><b >% de Utilização</b ></td >
+                <td >{{ response.superiorPorcentagemUtilizacao | numberbrl:2}}
+                </td >
+            </tr >
+            <tr align = "center" >
+                <td ><b >Espaço Morto Dinâmico</b > (m)</td >
+                <td >
+                    {{ response.superiorEspacoMortoDinamico| numberbrl:2}}
+                </td >
+                <td ><b >Desl. Vol.</b > (m³/d)</td >
+                <td >{{ response.superiorDeslVol | numberbrl:2}}
+                </td >
+            </tr >
+            </tbody >
+        </table >
+        <div ng-show = "getParam(4)" >
+            <h3 >Coluna Inferior</h3 >
+            <hr class = "my-2" style = "background-color: black" >
+            <div ng-controller = "genericMultipleDataChart" ng-init = "graficosfunction.push(atualizarGrafico);atualizarGrafico(zeroChart)" >
+                <canvas class = "chart chart-line" chart-data = "data" chart-options = "options" chart-labels = "labels" chart-colors = "colors" chart-dataset-override = "datasetOverride" chart-series = "series" ></canvas >
+            </div >
+            <h3 >Coluna Superior</h3 >
+            <hr class = "my-2" style = "background-color: black" >
+            <div ng-controller = "genericMultipleDataChart" ng-init = "graficosfunction.push(atualizarGrafico);atualizarGrafico(zeroChart)" >
+                <canvas class = "chart chart-line" chart-data = "data" chart-options = "options" chart-labels = "labels" chart-colors = "colors" chart-dataset-override = "datasetOverride" chart-series = "series" ></canvas >
+            </div >
+        </div >
+        <div ng-show = "getParam(5)" >
+            <h3 >Torque</h3 >
+            <hr class = "my-2" style = "background-color: black" >
+            <div ng-controller = "genericChart_torque" ng-init = "graficosfunction.push(atualizarGrafico);atualizarGrafico(zeroChart)" >
+                <canvas class = "chart chart-line" chart-data = "data" chart-options = "options" chart-labels = "labels" chart-colors = "colors" chart-dataset-override = "datasetOverride" chart-series = "series" ></canvas >
+            </div >
+        </div >
+    </div >
+</div >
+
+
+
+

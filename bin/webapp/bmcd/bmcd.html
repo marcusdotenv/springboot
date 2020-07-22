@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html >
+<meta charset = "utf-8" >
+<head >
+    <title > BMCD</title >
+    <meta http-equiv = "Content-Type" content = "text/html; charset=utf-8" >
+    <!--Logo Petrobras-->
+    <link rel = 'shortcut icon' type = 'image/x-icon' href = '/static/webapp/resources/images/favicon.ico' />
+    <link rel = "stylesheet" href = "../../../webapp/resources/css/bootstrap.min.css" >
+    <link rel = "stylesheet" href = "../../../webapp/resources/main.css" >
+    <link rel = "stylesheet" href = "../../../webapp/resources/library/introjs/introjs.min.css" >
+    <script >
+        function showDiv() {
+            document.getElementById('welcomeDiv').style.display = "block";
+            document.getElementById('helloDiv').style.display = "none";
+
+        }
+
+        function hideDiv() {
+            document.getElementById('welcomeDiv').style.display = "none";
+            document.getElementById('helloDiv').style.display = "block";
+
+        }
+
+        submitForms = function () {
+            document.forms["form1"].submit();
+            document.forms["form2"].submit();
+            document.forms["form3"].submit();
+        }
+    </script>
+</head >
+<body class = "row" >
+<header class = "col-12" >
+    <nav class = "navbar navbar-light" id = "nav1" style = "background-color: #ffcf33;" ></nav >
+    <nav class = "navbar navbar-expand-xl navbar-dark" style = "background-color: #017E5C;" >
+        <a class = "navbar-brand" href = "/" >SuitApp</a >
+        <button class = "navbar-toggler" type = "button" data-toggle = "collapse" data-target = "#navbarSupportedContent" aria-controls = "navbarSupportedContent" aria-expanded = "false" aria-label = "Toggle navigation" >
+            <span class = "navbar-toggler-icon" ></span >
+        </button >
+        <div class = "collapse navbar-collapse" id = "navbarSupportedContent" >
+            <ul class = "navbar-nav mr-auto" style = "min-width: 527px;" >
+                <li class = "nav-item dropdown " >
+                    <a class = "nav-link dropdown-toggle" href = "#" id = "navbarDropdown" role = "button" data-toggle = "dropdown" aria-haspopup = "true" aria-expanded = "false" style = "min-width: 122px;" >
+                        Ferramentas </a >
+                    <div class = "dropdown-menu" aria-labelledby = "navbarDropdown" style = "min-width: 186px;" >
+                        <a class = "dropdown-item" href = "/pwf" >PWF</a >
+                        <a class = "dropdown-item" href = "/ipr" >IPR</a > <a class = "dropdown-item" href = "/cresc" >CRESC</a >
+                        <a class = "dropdown-item" href = "/bmcd" >BMCD</a > <a class = "dropdown-item" href = "/sand" >Separador
+                        de Areia</a >
+                    </div >
+                </li >
+                <li class = "nav-item" >
+                    <a class = "nav-link" href = "/equip" >Equipamentos <span class = "sr-only" >(current)</span ></a >
+                </li >
+                <li class = "nav-item" >
+                    <a class = "nav-link" href = "/docs" >Documentação</a >
+                </li >
+                <li class = "nav-item" >
+                    <a class = "nav-link" href = "/about" >Sobre</a >
+                </li >
+                <li class = "nav-item" >
+                    <a class = "nav-link" href = "/#!/help" >Ajuda</a >
+                </li >
+            </ul >
+        </div >
+    </nav >
+</header >
+<div style = "width: -moz-available" class = "col-12" >
+    <div style = "width: -moz-available" ng-app = "app" >
+        <div align = "center" style = "width: -moz-available" ng-view ></div >
+    </div >
+</div >
+<!-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -->
+<!-- -- -- -- -- -- -- -- -- -- --              Librarys            -- -- -- -- -- -- -- -- -- -- -- -- -- -- -->
+<!-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -->
+<!-- ChartJS min production files -->
+<script defer src = "../../../webapp/resources/library/chart/Chart.min.js" ></script>
+<!-- jquery-3.3.1 min production framework -->
+<script defer src = "../../../webapp/resources/library/jquery/jquery-3.3.1.min.js" ></script>
+<!-- bootstrap min production framework -->
+<script defer src = "../../../webapp/resources/js/bootstrap.min.js" ></script>
+<script defer href = "../../../webapp/resources/js/bootstrap.bundle.min.js" ></script>
+<!-- AngularJS min production framework -->
+<script src = "../../../webapp/resources/library/angularjs/angular.min.js" ></script>
+<!-- AngularJS min production routing framework -->
+<script src = "../../../webapp/resources/library/angularjs/angular-route.min.js" ></script>
+<!-- AngularJS min production resource -->
+<script src = "../../../webapp/resources/library/angularjs/angular-resource.min.js" ></script>
+<!--ChartJS-angualar min production files-->
+<script defer src = "../../../webapp/resources/library/angularchart/angular-chart.js" ></script>
+<!-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -->
+<!-- -- -- -- -- -- -- -- -- -- -- --       My scripts        -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -->
+<!-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -->
+<!--My router-->
+<script src = "../../../webapp/Angular/bmcd/bmcd-router.js" ></script>
+<!--My Controllers-->
+<script src = "../../../webapp/Angular/bmcd/controllers/bmcd-controller.js" ></script>
+<!--My Factorys-->
+<script src = "../../../webapp/Angular/bmcd/factorys/bmcd-factory.js" ></script>
+<script src = "../../../webapp/Angular/equip/factorys/bomb-unit-factory.js" ></script>
+<script src = "../../../webapp/Angular/equip/factorys/piston-factory.js" ></script>
+<script src = "../../../webapp/Angular/equip/factorys/casing-factory.js" ></script>
+<script src = "../../../webapp/Angular/equip/factorys/tubing-factory.js" ></script>
+<script src = "../../../webapp/Angular/common/scripts/master.js" ></script> <!-- introJS min production resource -->
+<script src = "../../../webapp/resources/library/introjs/intro.min.js" ></script>
+<!--<script defer src="../../../webapp/resources/library/chart/Chart.bundle.min.js"></script>-->
+</body >
+</html >
+
