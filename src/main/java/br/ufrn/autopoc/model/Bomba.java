@@ -21,11 +21,11 @@ public class Bomba {
     private double vazaoDesejada;
 
     @Column(name="fabricante")
-    private String fabricante;
-    
-    @Column(name="range_vazao_min")
-    private int rangeVazaoMin;
+		private String fabricante;
 
+		@Column(name="diametro_externo")
+		private double diamExterno;
+    
     @Column(name="range_vazao_minima")
     private int rangeVazaoMinima;
 
@@ -69,28 +69,35 @@ public class Bomba {
     private double curvaPotenciaX4;
 
     @Column(name="coef_pot_x5")
-    private double curvaPotenciaX5;
+		private double curvaPotenciaX5;
 
     //Atributos de saída (não persistidas no banco)
-    private boolean efeitoGas;
+		@Transient 
+		private boolean efeitoGas;
 
+		@Transient
     private boolean efeitoViscosidade;
 
-    private double headEstagio;
+		@Transient 
+		private double headEstagio;
 
-    private double potEstagio;
+		@Transient 
+		private double potEstagio;
 
-    private double eficiencia;
+		@Transient 
+		private double eficiencia;
 
-    private double viscosidadeSuccao;
+		@Transient 
+		private double viscosidadeSuccao;
 
-    private int qntdEstagios;
+		@Transient 
+		private int qntdEstagios;
 
-    private double diamExterno;
+		@Transient 
+		private double headTotal;
 
-    private double headTotal;
-
-    private double BHPtotal;
+		@Transient 
+		private double BHPtotal;
 
     //Construtores
     //Necessário a criação do construtor vazio para uso do Data-Rest*
@@ -104,7 +111,6 @@ public class Bomba {
 		this.nome = nome;
 		this.vazaoDesejada = vazaoDesejada;
 		this.fabricante = fabricante;
-		this.rangeVazaoMin = rangeVazaoMin;
 		this.rangeVazaoMinima = rangeVazaoMinima;
 		this.vazaoNominal = vazaoNominal;
 		this.vazaoMaxima = vazaoMaxima;
@@ -156,13 +162,6 @@ public class Bomba {
 		this.fabricante = fabricante;
 	}
 
-	public int getRangeVazaoMin() {
-		return rangeVazaoMin;
-	}
-
-	public void setRangeVazaoMin(int rangeVazaoMin) {
-		this.rangeVazaoMin = rangeVazaoMin;
-	}
 
 	public int getRangeVazaoMinima() {
 		return rangeVazaoMinima;
