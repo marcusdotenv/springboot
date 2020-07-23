@@ -6,110 +6,109 @@ import javax.persistence.*;
 
 @Entity
 @EnableAutoConfiguration
-@Table(name="bomba")
+@Table(name = "bomba")
 public class Bomba {
-    @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name="id")
-    private Long id;
-    
-    //Atributos de entrada
-    @Column(name="nome")
-    private String nome;
-    
-    @Column(name="vazao_desejada")
-    private double vazaoDesejada;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
 
-    @Column(name="fabricante")
-		private String fabricante;
+	// Atributos de entrada
+	@Column(name = "nome")
+	private String nome;
 
-		@Column(name="diametro_externo")
-		private double diamExterno;
-    
-    @Column(name="range_vazao_minima")
-    private int rangeVazaoMinima;
+	@Column(name = "fabricante")
+	private String fabricante;
 
-    @Column(name="vazao_nominal")
-    private int vazaoNominal;
+	@Column(name = "diametro_externo")
+	private double diamExterno;
 
-    @Column(name="vazao_maxima")
-    private int vazaoMaxima;
+	@Column(name = "range_vazao_minima")
+	private int rangeVazaoMinima;
 
-    @Column(name="coef_head_x0")
-    private double curvaHeadX0;
+	@Column(name = "vazao_nominal")
+	private int vazaoNominal;
 
-    @Column(name="coef_head_x1")
-    private double curvaHeadX1;
+	@Column(name = "vazao_maxima")
+	private int vazaoMaxima;
 
-    @Column(name="coef_head_x2")
-    private double curvaHeadX2;
+	@Column(name = "coef_head_x0")
+	private double curvaHeadX0;
 
-    @Column(name="coef_head_x3")
-    private double curvaHeadX3;
+	@Column(name = "coef_head_x1")
+	private double curvaHeadX1;
 
-    @Column(name="coef_head_x4")
-    private double curvaHeadX4;
+	@Column(name = "coef_head_x2")
+	private double curvaHeadX2;
 
-    @Column(name="coef_head_x5")
-    private double curvaHeadX5;
+	@Column(name = "coef_head_x3")
+	private double curvaHeadX3;
 
-    @Column(name="coef_pot_x0")
-    private double curvaPotenciaX0;
+	@Column(name = "coef_head_x4")
+	private double curvaHeadX4;
 
-    @Column(name="coef_pot_x1")
-    private double curvaPotenciaX1;
+	@Column(name = "coef_head_x5")
+	private double curvaHeadX5;
 
-    @Column(name="coef_pot_x2")
-    private double curvaPotenciaX2;
+	@Column(name = "coef_pot_x0")
+	private double curvaPotenciaX0;
 
-    @Column(name="coef_pot_x3")
-    private double curvaPotenciaX3;
+	@Column(name = "coef_pot_x1")
+	private double curvaPotenciaX1;
 
-    @Column(name="coef_pot_x4")
-    private double curvaPotenciaX4;
+	@Column(name = "coef_pot_x2")
+	private double curvaPotenciaX2;
 
-    @Column(name="coef_pot_x5")
-		private double curvaPotenciaX5;
+	@Column(name = "coef_pot_x3")
+	private double curvaPotenciaX3;
 
-    //Atributos de saída (não persistidas no banco)
-		@Transient 
-		private boolean efeitoGas;
+	@Column(name = "coef_pot_x4")
+	private double curvaPotenciaX4;
 
-		@Transient
-    private boolean efeitoViscosidade;
+	@Column(name = "coef_pot_x5")
+	private double curvaPotenciaX5;
 
-		@Transient 
-		private double headEstagio;
+	// Atributos de saída (não persistidas no banco)
+	@Transient
+	private double vazaoDesejada;
+	
+	@Transient
+	private boolean efeitoGas;
 
-		@Transient 
-		private double potEstagio;
+	@Transient
+	private boolean efeitoViscosidade;
 
-		@Transient 
-		private double eficiencia;
+	@Transient
+	private double headEstagio;
 
-		@Transient 
-		private double viscosidadeSuccao;
+	@Transient
+	private double potEstagio;
 
-		@Transient 
-		private int qntdEstagios;
+	@Transient
+	private double eficiencia;
 
-		@Transient 
-		private double headTotal;
+	@Transient
+	private double viscosidadeSuccao;
 
-		@Transient 
-		private double BHPtotal;
+	@Transient
+	private int qntdEstagios;
 
-    //Construtores
-    //Necessário a criação do construtor vazio para uso do Data-Rest*
-    public Bomba() {
-    }
-           
-    public Bomba(String nome, double vazaoDesejada, String fabricante, int rangeVazaoMin, int rangeVazaoMinima,
+	@Transient
+	private double headTotal;
+
+	@Transient
+	private double BHPtotal;
+
+	// Construtores
+	// Necessário a criação do construtor vazio para uso do Data-Rest*
+	public Bomba() {
+	}
+
+	public Bomba(String nome, String fabricante, int rangeVazaoMin, int rangeVazaoMinima,
 			int vazaoNominal, int vazaoMaxima, double curvaHeadX0, double curvaHeadX1, double curvaHeadX2,
 			double curvaHeadX3, double curvaHeadX4, double curvaHeadX5, double curvaPotenciaX0, double curvaPotenciaX1,
 			double curvaPotenciaX2, double curvaPotenciaX3, double curvaPotenciaX4, double curvaPotenciaX5) {
 		this.nome = nome;
-		this.vazaoDesejada = vazaoDesejada;
 		this.fabricante = fabricante;
 		this.rangeVazaoMinima = rangeVazaoMinima;
 		this.vazaoNominal = vazaoNominal;
@@ -127,24 +126,24 @@ public class Bomba {
 		this.curvaPotenciaX4 = curvaPotenciaX4;
 		this.curvaPotenciaX5 = curvaPotenciaX5;
 	}
-    
-    //Getters/Setters
-    
+
+	// Getters/Setters
+
 	public Long getId() {
-        return id;
-    }
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getNome() {
-        return nome;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
 	public double getVazaoDesejada() {
 		return vazaoDesejada;
@@ -161,7 +160,6 @@ public class Bomba {
 	public void setFabricante(String fabricante) {
 		this.fabricante = fabricante;
 	}
-
 
 	public int getRangeVazaoMinima() {
 		return rangeVazaoMinima;
@@ -362,13 +360,12 @@ public class Bomba {
 	public void setBHPtotal(double bHPtotal) {
 		BHPtotal = bHPtotal;
 	}
-	
-	//To String
+
+	// To String
 	@Override
 	public String toString() {
 		return "Bomba [id=" + id + ", nome=" + nome + ", vazaoDesejada=" + vazaoDesejada + ", fabricante=" + fabricante
 				+ "]";
 	}
 
-    
 }
